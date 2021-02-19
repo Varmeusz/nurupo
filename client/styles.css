@@ -1,0 +1,10 @@
+.title {
+    text-align: center;
+}
+.nurupo-form, .loading{
+    width: 50vw;
+    margin: 0 auto;
+}
+.loading {
+    text-align: center;
+}
