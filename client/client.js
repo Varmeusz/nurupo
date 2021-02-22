@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://awaclawczyk.xyz/nurupo';
 const form = document.querySelector('form');
 const loadingElement = document.querySelector('.loading');
 loadingElement.style.display = "none";
@@ -23,7 +23,7 @@ form.addEventListener('submit', async (e) =>{
     }).then(response => response.json())
       .then(createdNurupo => {
           var img = document.createElement("img");
-          img.src = "http://localhost:5000/uploads?id="+createdNurupo;
+          img.src =  API_URL+"/uploads?id="+createdNurupo;
           document.querySelector(".nurupos").prepend(img);
           img = null;
           setTimeout(()=> {
@@ -45,7 +45,7 @@ loadNurupos = (e) =>{
             div.innerHTML = element[0];
             container.appendChild(div);
             var img = document.createElement("img");
-            img.src = "http://localhost:5000/uploads?id="+element[1];
+            img.src = API_URL + "/uploads?id="+element[1];
             container.appendChild(img);
             img = null; 
             div = document.createElement("small");

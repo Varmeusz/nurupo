@@ -106,6 +106,6 @@ app.get("/uploads", (req, res) => {
 // });
 // app.use(express.static('uploads'));
 
-app.listen(5000, () => {
-    console.log('Listening on http://localhost:5000');
+app.listen(5001, () => {
+    console.log('Listening on http://localhost:5001');
 });
