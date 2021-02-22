@@ -1,4 +1,5 @@
-const API_URL = 'https://awaclawczyk.xyz/nurupo';
+const API_URL = 'http://localhost:5001';
+// const API_URL = 'https://awaclawczyk.xyz/nurupo';
 const form = document.querySelector('form');
 const loadingElement = document.querySelector('.loading');
 loadingElement.style.display = "none";
