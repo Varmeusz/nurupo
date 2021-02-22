@@ -10,13 +10,17 @@
     <header>
         <h1 class="title">nurupo - Twitter for nerds 🤓😎</h1>
     </header>
-    <form class="nurupo-form">
+    <form class="nurupo-form" >
         <label for="name">Name</label>
         <input class="u-full-width" type="text" id="name" name="name">
-        <label for="content">Content</label>
-        <textarea class="u-full-width" type="text" id="content" name="content"></textarea>
+        <label for="content">Image</label>
+        <input class="u-full-width" type="file" multiple id="content" name="content">
+        
         <button class="button-primary">Send the memes 👏👏</button>
     </form>
     <div class="loading">Uploading...</div>
+    <div class="nurupos">
+        
+    </div>
     <script src="client.js"></script>
 </html>
