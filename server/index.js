@@ -7,7 +7,6 @@ const fs = require('fs');
 const app = express();
 const db = monk('localhost/nurupo');
 const nurupos = db.get('nurupos');
-
 app.use(cors());
 
 app.get('/', (req, res) => {
@@ -37,7 +36,7 @@ app.post('/nurupos', (req, res) => {
     form.parse(req);
 });
 
-app.post('/nurupo', async (req, res) => {
+app.post('/nurupo', (req, res) => {
     var form = new formidable.IncomingForm(),
     files = [],
     fields = [];
