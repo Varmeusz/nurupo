@@ -3,7 +3,7 @@ const cors = require('cors');
 const monk = require('monk');
 const path = require("path");
 const formidable = require('formidable');
-
+const fs = require('fs');
 const app = express();
 const db = monk('localhost/nurupo');
 const nurupos = db.get('nurupos');
@@ -37,11 +37,25 @@ app.post('/nurupos', (req, res) => {
     form.parse(req);
 });
 
-app.post('/nurupo', (req, res) => {
+app.post('/nurupo', async (req, res) => {
     var form = new formidable.IncomingForm(),
     files = [],
     fields = [];
     form.maxFileSize = 10000000;
+    nurupos
+        .count({})
+        .then(count => {
+            if(count>10){
+                nurupos
+                .find({}, {limit: 1, sort: {"_id": +1}})
+                .then(last => {
+                    fs.unlink(last[0].file.toString(), (err) =>{
+                        if(err) throw err;
+                    })
+                    nurupos.remove({"_id":last[0]._id});
+                })
+            }
+        })
     form.on('fileBegin', (name, file) => {
         file.path = __dirname + '/uploads/images/' + file.name
     });
