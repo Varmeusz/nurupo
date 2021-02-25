@@ -7,8 +7,9 @@ const fs = require('fs');
 const app = express();
 const db = monk('localhost/nurupo');
 const nurupos = db.get('nurupos');
+const Filter = require('bad-words');
+const filter = new Filter(); 
 app.use(cors());
-
 app.get('/', (req, res) => {
     res.json({
         message: 'Nurupo!'
@@ -56,10 +57,10 @@ app.post('/nurupo', (req, res) => {
             }
         })
     form.on('fileBegin', (name, file) => {
-        file.path = __dirname + '/uploads/images/' + file.name
+        file.path = __dirname + '/uploads/images/' + filter.clean(file.name.toString());
     });
     form.on('field', (field, value) => {
-        fields.push([field, value]);
+        fields.push([field, filter.clean(value.toString())]);
     });
     form.on('file', (field, file) => {
         files.push([field, file]);
