@@ -1,4 +1,4 @@
-const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5001' :'https://awaclawczyk.xyz/nurupo';
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5001' : 'https://awaclawczyk.xyz/nurupo';
 const form = document.querySelector('form');
 const loadingElement = document.querySelector('.loading');
 loadingElement.style.display = "none";
@@ -22,15 +22,27 @@ form.addEventListener('submit', async (e) =>{
         },
     }).then(response => response.json())
       .then(createdNurupo => {
-          var img = document.createElement("img");
-          img.src =  API_URL+"/uploads?id="+createdNurupo;
-          document.querySelector(".nurupos").prepend(img);
-          img = null;
-          setTimeout(()=> {
+        var container = document.createElement("div");
+        var header = document.createElement("h3");
+        var img = document.createElement("img");
+        var small = document.createElement("small");
+        header.innerHTML = element[0];
+        container.appendChild(header);
+
+        img.src = API_URL + "/uploads?id="+createdNurupo._id;
+        container.appendChild(img);
+
+        small.innerHTML = createdNurupo.created;
+        container.appendChild(small);
+
+        document.querySelector(".nurupos").prepend(container);
+        setTimeout(()=> {
             loadingElement.style.display = 'none';
-            form.style.display = '';}, 100);
+            form.style.display = '';
+        }, 100);
       })
 });
+
 loadNurupos = (e) =>{
     var ids = [];
     fetch(API_URL+"/nurupos", {
@@ -41,16 +53,19 @@ loadNurupos = (e) =>{
         console.log(ids);
         ids.forEach(element => {
             var container = document.createElement("div");
-            var div = document.createElement("h3");
-            div.innerHTML = element[0];
-            container.appendChild(div);
+            var header = document.createElement("h3");
             var img = document.createElement("img");
+            var small = document.createElement("small");
+
+            header.innerHTML = element[0];
+            container.appendChild(header);
+
             img.src = API_URL + "/uploads?id="+element[1];
             container.appendChild(img);
-            img = null; 
-            div = document.createElement("small");
-            div.innerHTML = element[2];
-            container.appendChild(div);
+
+            small.innerHTML = element[2];
+            container.appendChild(small);
+
             document.querySelector(".nurupos").appendChild(container);
         });
     })

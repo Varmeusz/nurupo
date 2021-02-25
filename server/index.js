@@ -9,12 +9,34 @@ const db = monk('localhost/nurupo');
 const nurupos = db.get('nurupos');
 const Filter = require('bad-words');
 const filter = new Filter(); 
+const rateLimit = require('express-rate-limit');
+
 app.use(cors());
-app.get('/', (req, res) => {
-    res.json({
-        message: 'Nurupo!'
-    })
+
+app.get("/nurupos", (req,res) => {
+    nurupos
+        .find({}, {limit: 10, sort: {"_id":-1}})
+        .then(nuruposFound => {
+            var ids = nuruposFound.reduce((r,e) => {
+                r.push([e.name, e._id, e.created]);
+                return r;
+            }, []);
+            res.json(ids);
+        })
 });
+
+app.get("/uploads", (req, res) => {
+    nurupos
+        .find({'_id': req.query.id})
+        .then(foundNurupo => {
+            res.sendFile(path.resolve(foundNurupo[0].file));
+        });
+});
+
+app.use(rateLimit({
+    windowMs: 15 * 1000, //15s
+    max: 1
+}));
 
 app.post('/nurupos', (req, res) => {
     var form = new formidable.IncomingForm(),
@@ -74,31 +96,16 @@ app.post('/nurupo', (req, res) => {
         nurupos
             .insert(nurupo)
             .then(createdNurupo => {
-                res.json(createdNurupo._id);
+                
+                res.json(createdNurupo.reduce((r,e) => {
+                    r.push([e.name, e._id, e.created]);
+                    return r;
+                }, []));
             })
     });
     form.parse(req);
 });
 
-app.get("/nurupos", (req,res) => {
-    nurupos
-        .find({}, {limit: 10, sort: {"_id":-1}})
-        .then(nuruposFound => {
-            var ids = nuruposFound.reduce((r,e) => {
-                r.push([e.name, e._id, e.created]);
-                return r;
-            }, []);
-            res.json(ids);
-        })
-});
-
-app.get("/uploads", (req, res) => {
-    nurupos
-        .find({'_id': req.query.id})
-        .then(foundNurupo => {
-            res.sendFile(path.resolve(foundNurupo[0].file));
-        });
-});
 
 app.listen(5001, () => {
     console.log('Listening on http://localhost:5001');
