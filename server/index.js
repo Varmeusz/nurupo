@@ -96,12 +96,9 @@ app.post('/nurupo', (req, res) => {
         nurupos
             .insert(nurupo)
             .then(createdNurupo => {
-                
-                res.json(createdNurupo.reduce((r,e) => {
-                    r.push([e.name, e._id, e.created]);
-                    return r;
-                }, []));
-            })
+		res.status(200);
+               res.json(createdNurupo._id); 
+	    });
     });
     form.parse(req);
 });
